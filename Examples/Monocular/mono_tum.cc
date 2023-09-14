@@ -45,12 +45,21 @@ int main(int argc, char **argv)
     vector<string> vstrImageFilenames;
     vector<double> vTimestamps;
     string strFile = string(argv[3])+"/rgb.txt";
+    // if strFile is not exist, then error
+    ifstream f;
+    f.open(strFile.c_str());
+    if(!f.is_open())
+    {
+        cerr << endl << "Failed to open file: " << strFile << endl;
+        return 1;
+    }
+    f.close();
     LoadImages(strFile, vstrImageFilenames, vTimestamps);
 
     int nImages = vstrImageFilenames.size();
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::MONOCULAR,true);
+    ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::MONOCULAR,false);
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
