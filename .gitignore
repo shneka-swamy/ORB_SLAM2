@@ -21,4 +21,10 @@ Vocabulary/ORBvoc.txt
 build/
 *~
 lib/
+CMakeUserPresets.json
 
+._*.png
+.cache/
+
+cmake-build-*
+compile_commands.json
