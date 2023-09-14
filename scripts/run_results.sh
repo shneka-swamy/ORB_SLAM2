@@ -9,7 +9,7 @@ if [ "$#" -lt 2 ]; then
 fi
 
 # make a list of desk_with_person, sitting_xyz and walking_xyz
-patternList=("sitting_xyz" "sitting_half" "walking_rpy" "walking_static" "walking_half")
+patternList=("sitting_xyz" "sitting_half" "walking_xyz" "walking_rpy" "walking_static" "walking_half")
 
 input_dir=""
 verbose=false
@@ -141,6 +141,12 @@ for pattern in "${patternList[@]}"; do
         if [[ "$dir" == *"$pattern"* ]]; then
             # dir will have rgbd_dataset_freiberg{1d}_pattern_{2d}, extract 1d number
             num=$(echo "$dir" | grep -oP '(?<=rgbd_dataset_freiburg)\d(?=_'"$pattern"')')
+            # eps_value if 2d number from previous comment
+            eps_value=$(echo "$dir" | grep -oP '(?<=_'"$pattern"_')\d+')
+            # if num != 10 continue
+            if [ "$eps_value" -ne "10" ]; then
+                continue
+            fi
             if [ "$verbose" = true ]; then
                 echo -e "\e[K Launching $dir with Monocular, num: $num"
             fi
