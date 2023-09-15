@@ -9,7 +9,7 @@ if [ "$#" -lt 2 ]; then
 fi
 
 # make a list of desk_with_person, sitting_xyz and walking_xyz
-patternList=("walking_xyz" "sitting_xyz" "sitting_halfsphere" "walking_rpy" "walking_static" "sitting_halfsphere")
+patternList=("walking_xyz" "sitting_xyz" "sitting_halfsphere" "walking_rpy" "walking_halfsphere")
 
 input_dir=""
 verbose=false
