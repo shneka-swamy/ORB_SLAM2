@@ -168,6 +168,18 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   file(REMOVE ${EXPECTED_SYMLINK})
 endif()
 
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Vocabulary/ORBvoc.txt")
+  if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Vocabulary/ORBvoc.txt.tar.gz")
+    MESSAGE(FATAL_ERROR "ORBvoc.txt.tar.gz not found.")
+  endif()
+  message(STATUS "Uncompressing ORBvoc.txt.tar.gz...")
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E tar xzf ${CMAKE_CURRENT_SOURCE_DIR}/Vocabulary/ORBvoc.txt.tar.gz
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Vocabulary
+    )
+  message(STATUS "Uncompression complete.")
+endif()
+
 if (NOT EXISTS "${EXPECTED_SYMLINK}")
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${COMPILE_COMMANDS_FILE} ${EXPECTED_SYMLINK}
