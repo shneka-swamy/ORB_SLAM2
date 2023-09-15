@@ -9,7 +9,7 @@ if [ "$#" -lt 2 ]; then
 fi
 
 # make a list of desk_with_person, sitting_xyz and walking_xyz
-patternList=("sitting_xyz" "sitting_half" "walking_rpy" "walking_static" "walking_half")
+patternList=("walking_xyz" "sitting_xyz" "sitting_half" "walking_rpy" "walking_static" "walking_half")
 
 input_dir=""
 verbose=false
@@ -110,14 +110,14 @@ launch_mono_tum() {
 
         # if KeyFrameTrajectory.txt is empty, then skip
         if [ ! -s KeyFrameTrajectory.txt ]; then
-            echo "KeyFrameTrajectory.txt is empty, skipping"
-            continue
+           echo "KeyFrameTrajectory.txt is empty, skipping"
+           continue
         fi
 
         mv KeyFrameTrajectory.txt $outputfileDir/kf_$outputfile.txt
 
-        plotpath="$output_dir"/plot_${outputfile}.png
-        resultpath="$output_dir"/path_${outputfile}.zip
+        plotpath="$output_dir"/plot_${outputfile}
+        resultpath="$output_dir"/path_${outputfile}
 
         # copy groundtruth from rgb_parent to dir
         cp "$rgb_dir_parent"/${rgb_parent}/groundtruth.txt "$dir"/groundtruth.txt
@@ -128,9 +128,16 @@ launch_mono_tum() {
         # remove first line in groundtruth.txt
         sed -i '1d' "$dir"/groundtruth.txt
 
-        evo_cmd="evo_ape tum $dir/groundtruth.txt $outputfileDir/kf_${outputfile}.txt -as --plot_mode xy --save_plot ${plotpath} --save_results ${resultpath} --no_warnings --pose_relation trans_part"
+        evo_cmd="evo_ape tum $dir/groundtruth.txt $outputfileDir/kf_${outputfile}.txt -as --plot_mode xy --save_plot ${plotpath}.png --save_results ${resultpath}.zip --no_warnings --pose_relation trans_part"
+
+        evo_cmd="evo_rpe tum $dir/groundtruth.txt $outputfileDir/kf_${outputfile}.txt -as --plot_mode xy --save_plot ${plotpath}_tr.png --save_results ${resultpath}_tr.zip --no_warnings --pose_relation trans_part"
         echo -e "\e[K $evo_cmd"
         $evo_cmd
+        
+        evo_cmd="evo_rpe tum $dir/groundtruth.txt $outputfileDir/kf_${outputfile}.txt -as --plot_mode xy --save_plot ${plotpath}_rr.png --save_results ${resultpath}_rr.zip --no_warnings --pose_relation rot_part"
+        echo -e "\e[K $evo_cmd"
+        $evo_cmd
+
     done
 }
 
